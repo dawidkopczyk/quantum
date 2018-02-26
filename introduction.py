@@ -57,7 +57,8 @@ P0 = np.dot(state_zero, state_zero.T)
 P1 = np.dot(state_one, state_one.T)
 
 # Probability of first qubit being in state 0
-prob0 = np.trace(np.dot(multi_kron(P0, gate_I), state))
+rho = np.dot(state, state.T)
+prob0 = np.trace(np.dot(multi_kron(P0, gate_I), rho))
 
 # Simulate
 if np.random.rand() < prob0:
