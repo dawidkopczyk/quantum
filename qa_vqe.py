@@ -15,9 +15,9 @@ from pyquil.paulis import sZ
 H = sZ(0)
 
 # Define ansatz
-from pyquil.gates import RX
+from pyquil.gates import RY
 def ansatz(params):
-    return Program(RX(params[0], 0))
+    return Program(RY(params[0], 0))
 
 # Function calculating expectation value
 def expectation(params):
@@ -54,3 +54,4 @@ plt.show()
 initial_params = [0.0]
 minimum = minimize(expectation, initial_params, method='Nelder-Mead', 
                    options= {'initial_simplex': np.array([[0.0], [0.05]]), 'xatol': 1.0e-2})
+print(minimum)
