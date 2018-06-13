@@ -53,5 +53,5 @@ plt.show()
 # Minimize and get approximate of the lowest eigenvalue
 initial_params = [0.0]
 minimum = minimize(expectation, initial_params, method='Nelder-Mead', 
-                   options= {'initial_simplex': np.array([[0.0], [0.05]]), 'xatol': 1.0e-2})
+                   options={'initial_simplex': np.array([[0.0], [0.05]]), 'xatol': 1.0e-2})
 print(minimum)
