@@ -1,8 +1,8 @@
-from pyquil.api import QVMConnection
+from pyquil import get_qc
 from grove.deutsch_jozsa.deutsch_jozsa import DeutschJosza
 
 # Connection
-qvm = QVMConnection()
+qc = get_qc('9q-square-qvm')
 
 #==============================================================================
 # Grove: Deutsch-Jozsa Algorithm
@@ -13,7 +13,7 @@ mapping = {'000': '1', '001': '1', '010': '1', '011': '1',
 
 # Run
 algo = DeutschJosza()
-ret = algo.is_constant(qvm, bitstring_map=mapping)    
+ret = algo.is_constant(qc, bitstring_map=mapping)    
 if ret:
     print("The function is constant")
 else:
