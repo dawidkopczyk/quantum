@@ -1,11 +1,10 @@
-import numpy as np
-from pyquil.quil import Program
-from pyquil.api import QVMConnection
+from pyquil import Program, get_qc
+from pyquil.api import WavefunctionSimulator
 
 #==============================================================================
 # Initilization
 #==============================================================================
-qvm = QVMConnection()
+qc = get_qc('2q-qvm')
 prog = Program()
 
 #==============================================================================
@@ -15,7 +14,7 @@ from pyquil.gates import I
 prog.inst(I(1), I(0))
 
 # Print current quantum state of the system
-state = qvm.wavefunction(prog)
+state = WavefunctionSimulator().wavefunction(prog)
 print("The system is in state: {}".format(state))
 
 # Probabilities
@@ -31,7 +30,7 @@ from pyquil.gates import X
 prog.inst(X(0))
 
 # Print current quantum state of the system
-state = qvm.wavefunction(prog)
+state = WavefunctionSimulator().wavefunction(prog)
 print("The system is in state: {}".format(state))
 
 # Swap gate
@@ -39,7 +38,7 @@ from pyquil.gates import SWAP
 prog.inst(SWAP(1, 0))
 
 # Print current quantum state of the system
-state = qvm.wavefunction(prog)
+state = WavefunctionSimulator().wavefunction(prog)
 print("The system is in state: {}".format(state))
 
 # Hadamard gate
@@ -47,19 +46,27 @@ from pyquil.gates import H
 prog.inst(H(1))
 
 # Print current quantum state of the system
-state = qvm.wavefunction(prog)
+state = WavefunctionSimulator().wavefunction(prog)
 print("The system is in state: {}".format(state))
 
 #==============================================================================
 # Measurment
 #==============================================================================
-prog.measure(qubit_index=1, classical_reg=0)
-prog.measure(qubit_index=0, classical_reg=1)
-
-ret = qvm.run(prog, classical_addresses=[0, 1])
+# Classical regsitry storing the results
+ro = prog.declare('ro', 'BIT', 2)
+# Measure
+prog.measure(1, ro[0])
+prog.measure(0, ro[1])
+# Compile and run
+prog_exec = qc.compile(prog)
+ret = qc.run(prog_exec)
 print("The first qubit is in state |{}> and second in state |{}> after measurment".format(*ret[0]))
 
-ret = qvm.run(prog, classical_addresses=[0, 1], trials=1000)
+# Repeat the experiment 1000 times
+prog.wrap_in_numshots_loop(1000)
+# Compile and run
+prog_exec = qc.compile(prog)
+ret = qc.run(prog_exec)
 freq_first_is_0 = [trial[0] for trial in ret].count(0) / 1000
 freq_first_is_1 = [trial[0] for trial in ret].count(1) / 1000
 freq_second_is_0 = [trial[1] for trial in ret].count(0) / 1000
