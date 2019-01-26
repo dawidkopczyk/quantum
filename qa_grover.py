@@ -1,8 +1,8 @@
 import numpy as np
 
-from pyquil.quil import Program
-from pyquil.api import QVMConnection
+from pyquil import Program, get_qc
 from pyquil.gates import H, I
+from pyquil.api import WavefunctionSimulator
 
 #==============================================================================
 # Construct quantum oracle (not a part of algorithm)
@@ -20,17 +20,17 @@ print(oracle)
 #==============================================================================
 # Grover's Search Algorithm
 #==============================================================================
-qvm = QVMConnection()
+qc = get_qc('9q-square-qvm')
 gr_prog = Program()
         
 # \psi_0: Qubits initilization
 qubits = list(reversed(range(N)))
 gr_prog.inst([I(q) for q in qubits])
-#print(qvm.wavefunction(gr_prog))
+#print(WavefunctionSimulator().wavefunction(gr_prog))
 
 # \psi_1: Apply Hadamard gates
 gr_prog.inst([H(q) for q in qubits])
-#print(qvm.wavefunction(gr_prog))
+#print(WavefunctionSimulator().wavefunction(gr_prog))
 
 # Define quantum oracle
 ORACLE_GATE_NAME = "GROVER_ORACLE"
@@ -49,17 +49,19 @@ for i in range(N_ITER):
     
     # \psi_2^i:  Apply Quantum Oracle
     gr_prog.inst(tuple([ORACLE_GATE_NAME] + qubits))
-    #print(qvm.wavefunction(gr_prog))
+    #print(WavefunctionSimulator().wavefunction(gr_prog))
     
     # \psi_3^i:  Apply Inversion around the mean
     gr_prog.inst(tuple([DIFFUSION_GATE_NAME] + qubits))
-    #print(qvm.wavefunction(gr_prog))
+    #print(WavefunctionSimulator().wavefunction(gr_prog))
 
 # \psi_5: Measure
+ro = gr_prog.declare('ro', 'BIT', N) # Classical registry storing the results
 for q in qubits:
-    gr_prog.measure(qubit_index=q, classical_reg=q)
+    gr_prog.measure(q, ro[q])
 
-# Run
-ret = qvm.run(gr_prog, classical_addresses=qubits)
-ret_string = ''.join([str(q) for q in ret[0]])
+# Compile and run
+prog_exec = qc.compile(gr_prog)
+ret = qc.run(prog_exec)
+ret_string = ''.join([str(q) for q in reversed(ret[0])])
 print("The searched string is: {}".format(ret_string))

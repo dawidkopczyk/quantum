@@ -1,6 +1,6 @@
 import numpy as np
 from grove.amplification.grover import Grover
-from pyquil.api import QVMConnection
+from pyquil import get_qc
 
 # Bitstring Map as an algorithm input
 SEARCHED_STRING = "1011010"
@@ -14,12 +14,12 @@ for b in range(2 ** N):
         mapping[pad_str] = 1
 
 # Connection
-qvm = QVMConnection()
+qc = get_qc('9q-square-qvm')
 
 #==============================================================================
 # Grove: Grove's Search Algorithm
 #==============================================================================
 # Run
 algo = Grover()
-ret_string = algo.find_bitstring(qvm, bitstring_map=mapping)    
+ret_string = algo.find_bitstring(qc, bitstring_map=mapping)    
 print("The searched string is: {}".format(ret_string))
