@@ -7,7 +7,7 @@ from pyquil.api import WavefunctionSimulator
 #==============================================================================
 # Deutsch Algorithm
 #==============================================================================
-qc = get_qc('9q-square-qvm')
+qc = get_qc('9q-qvm')
 d_prog = Program()
 
 # \psi_0: Qubit initilization

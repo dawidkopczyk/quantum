@@ -14,7 +14,7 @@ for b in range(2 ** N):
         mapping[pad_str] = 1
 
 # Connection
-qc = get_qc('9q-square-qvm')
+qc = get_qc('9q-qvm')
 
 #==============================================================================
 # Grove: Grove's Search Algorithm

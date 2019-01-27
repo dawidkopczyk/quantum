@@ -20,7 +20,7 @@ print(oracle)
 #==============================================================================
 # Grover's Search Algorithm
 #==============================================================================
-qc = get_qc('9q-square-qvm')
+qc = get_qc('9q-qvm')
 gr_prog = Program()
         
 # \psi_0: Qubits initilization

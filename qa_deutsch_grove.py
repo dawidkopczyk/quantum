@@ -2,7 +2,7 @@ from pyquil import get_qc
 from grove.deutsch_jozsa.deutsch_jozsa import DeutschJosza
 
 # Connection
-qc = get_qc('9q-square-qvm')
+qc = get_qc('9q-qvm')
 
 #==============================================================================
 # Grove: Deutsch-Jozsa Algorithm
