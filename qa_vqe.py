@@ -1,14 +1,13 @@
 import numpy as np
 from scipy.optimize import minimize
 
-from pyquil.quil import Program
-from pyquil.api import QVMConnection
+from pyquil import Program, get_qc
 
 #==============================================================================
 # Variational-Quantum-Eigensolver
 #==============================================================================
 # Create connection with QVM
-qvm = QVMConnection()
+qc = get_qc('2q-qvm')
 
 # Define matrix
 from pyquil.paulis import sZ
@@ -25,10 +24,17 @@ def expectation(params):
     # Define number of measurments
     samples = 10000
     
-    # Define program and measure
+    # Define program
     prog = ansatz(params)
-    prog.measure(0, 0)
-    ret = qvm.run(prog, [0], trials=samples) 
+    
+    # Measure
+    ro = prog.declare('ro', 'BIT', 1) # Classical registry storing the results
+    prog.measure(0, ro[0])
+    
+    # Compile and execute
+    prog.wrap_in_numshots_loop(samples)
+    prog_exec = qc.compile(prog)
+    ret = qc.run(prog_exec)
     
     # Calculate expectation
     freq_is_0 = [trial[0] for trial in ret].count(0) / samples

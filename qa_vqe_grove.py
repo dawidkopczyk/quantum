@@ -1,14 +1,13 @@
 import numpy as np
 from scipy.optimize import minimize
 
-from pyquil.quil import Program
-from pyquil.api import QVMConnection
+from pyquil import Program, get_qc
 
 #==============================================================================
 # Variational-Quantum-Eigensolver in Grove
 #==============================================================================
 # Create connection with QVM
-qvm = QVMConnection()
+qc = get_qc('2q-qvm')
 
 # Define matrix
 from pyquil.paulis import sZ
@@ -25,5 +24,5 @@ vqe = VQE(minimizer=minimize, minimizer_kwargs={'method': 'nelder-mead',
           'options': {'initial_simplex': np.array([[0.0], [0.05]]), 'xatol': 1.0e-2}})
 
 initial_params = [0.0]
-result = vqe.vqe_run(ansatz, H, initial_params, samples=10000, qvm=qvm)
+result = vqe.vqe_run(ansatz, H, initial_params, samples=10000, qc=qc)
 print(result)

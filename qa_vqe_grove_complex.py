@@ -1,8 +1,7 @@
 import numpy as np
 from scipy.optimize import minimize
 
-from pyquil.quil import Program
-from pyquil.api import QVMConnection
+from pyquil import Program, get_qc
 
 # Define matrix
 from pyquil.paulis import PauliSum, PauliTerm
@@ -23,11 +22,11 @@ def ansatz(params):
 
 # Minimize and get approximate of the lowest eigenvalue
 from grove.pyvqe.vqe import VQE
-qvm = QVMConnection()
+qc = get_qc('9q-qvm')
 vqe = VQE(minimizer=minimize, minimizer_kwargs={'method': 'nelder-mead', 
                                                 'options': {'xatol': 1.0e-2}})
 
 np.random.seed(999)
 initial_params = np.random.uniform(0.0, 2*np.pi, size=n_qubits)
-result = vqe.vqe_run(ansatz, H, initial_params, samples=None, qvm=qvm)
+result = vqe.vqe_run(ansatz, H, initial_params, samples=None, qc=qc)
 print(result)
