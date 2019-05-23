@@ -9,3 +9,4 @@ The repository contains algorithms simulating quantum computations in Python.
 - qa_grover.py and qa_grover_grove.py - Variational-Quantum-Eigensolver algorithm explained with Python implementation. [Read on blog.](http://dkopczyk.quantee.co.uk/vqe/)
 - quantum_entanglement.py - quantum entanglement explained in an accesible way for Computer Scientist. [Read on blog.](http://dkopczyk.quantee.co.uk/quantum-entanglement/)
 - pe.py - quantum phase estimation algorithm explained with Python implementation [Read on blog.](http://dkopczyk.quantee.co.uk/qpe/)
+- variational.py - introduction to variational quantum circuits explained with Python PennyLane implementation [Read on blog.](http://dkopczyk.quantee.co.uk/variational-quantum-circuits/)
